@@ -26,6 +26,9 @@ Thank you for detailing your requirements! Here’s a breakdown of what you want
 
 ---
 
+
+https://github.com/zhobinalex/Soorino-/blob/main/README.md
+
 ## **Full Bash Script for Termux**
 
 ```bash
