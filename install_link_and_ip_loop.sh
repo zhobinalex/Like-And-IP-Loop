@@ -70,30 +70,90 @@ menu() {
 }
 
 repeat_open_url() {
-  read -p "Enter URL (e.g., google.com or https://example.com): " url
+#!/data/data/com.termux/files/usr/bin/bash
 
-  # Auto-add https:// if not already included
-  if [[ ! "$url" =~ ^https?:// ]]; then
-    url="https://$url"
-  fi
+echo "Select mode:"
+echo "1) Repeated wget with full control"
+echo "2) Quick wget with speed and duration"
+read -p "> " mode
 
-  echo "[*] Final URL: $url"
-  read -p "Speed (seconds between opens): " speed
-  read -p "Pause time (minutes between bursts): " pause_minutes
-  pause_seconds=$((pause_minutes * 60))
-
-  echo "[*] Starting loop... Press Ctrl+C to stop."
-
-  while true; do
-    termux-open-url "$url"
-    sleep "$speed"
-
-    if [ "$pause_seconds" -gt 0 ]; then
-      echo "[*] Pausing for $pause_seconds seconds..."
-      sleep "$pause_seconds"
+if [ "$mode" == "1" ]; then
+    read -p "Enter target URL: " url
+    if [[ -z "$url" ]]; then
+      echo "❌ URL cannot be empty."
+      exit 1
     fi
-  done
-}
+
+    read -p "How many times to repeat? " count
+    if ! [[ "$count" =~ ^[0-9]+$ ]]; then
+      echo "❌ Count must be a positive integer."
+      exit 1
+    fi
+
+    read -p "Interval between each request (seconds): " delay
+    if ! [[ "$delay" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+      echo "❌ Delay must be a number."
+      exit 1
+    fi
+
+    read -p "Rest every how many requests? (enter 0 to skip): " rest_every
+    if ! [[ "$rest_every" =~ ^[0-9]+$ ]]; then
+      echo "❌ Rest every must be an integer."
+      exit 1
+    fi
+
+    read -p "Rest duration (seconds): " rest_time
+    if ! [[ "$rest_time" =~ ^[0-9]+$ ]]; then
+      echo "❌ Rest time must be an integer."
+      exit 1
+    fi
+
+    for ((i = 1; i <= count; i++)); do
+        echo "[ $i / $count ] Fetching $url ..."
+        wget -q "$url" || echo "⚠️ Failed to fetch $url"
+        echo "Done. Waiting $delay seconds..."
+        sleep "$delay"
+
+        if (( rest_every > 0 && i % rest_every == 0 )); then
+            echo "Resting for $rest_time seconds..."
+            sleep "$rest_time"
+        fi
+    done
+
+elif [ "$mode" == "2" ]; then
+    read -p "Enter target URL or IP: " target
+    if [[ -z "$target" ]]; then
+      echo "❌ Target cannot be empty."
+      exit 1
+    fi
+
+    read -p "Speed (seconds between each request): " speed
+    if ! [[ "$speed" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+      echo "❌ Speed must be a number."
+      exit 1
+    fi
+
+    read -p "Duration to run (seconds): " duration
+    if ! [[ "$duration" =~ ^[0-9]+$ ]]; then
+      echo "❌ Duration must be an integer."
+      exit 1
+    fi
+
+    end_time=$((SECONDS + duration))
+
+    while [ $SECONDS -lt $end_time ]; do
+        echo "Fetching $target ..."
+        wget -q "$target" || echo "⚠️ Failed to fetch $target"
+        echo "Done. Waiting $speed seconds..."
+        sleep "$speed"
+    done
+else
+    echo "Invalid mode selected."
+    exit 1
+fi
+
+echo "✅ Done."
+
 connect_ip_port() {
   if [ "\$lang" = "RU" ]; then
     read -p "Введите IP: " ip
