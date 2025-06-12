@@ -3,6 +3,16 @@ Great! Here's a self-contained .sh installer for your Termux script named:
 > 🎯 Link And IP Loop
 
 
+ To Use the Installer
+
+1. Save as:
+2.   https://github.com/zhobinalex/Like-And-IP-Loop/install_link_and_ip_loop.sh
+
+
+3. Run in Termux:
+
+chmod +x install_link_and_ip_loop.sh
+./install_link_and_ip_loop.sh
 
 This installer:
 
