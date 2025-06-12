@@ -9,10 +9,11 @@ Great! Here's a self-contained .sh installer for your Termux script named:
 2.   https://github.com/zhobinalex/Like-And-IP-Loop/install_link_and_ip_loop.sh
 
 
-3. Run in Termux:
+3. open folder LinkAndIPLoop
 
-chmod +x install_link_and_ip_loop.sh
-./install_link_and_ip_loop.sh
+chmod +x
+
+bash 
 
 This installer:
 
