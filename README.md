@@ -10,7 +10,7 @@ Creates a working folder with needed .txt files
 
 Adds a demo Git link (which you can replace later)
 
-Asks the user for language: English 🇬🇧, Russian 🇷🇺, or Persian 🇮🇷
+Asks the user for language: English 🇬🇧, Russian 🇷🇺
 
 Displays the script name in a styled header
 
