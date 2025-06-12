@@ -1,21 +1,38 @@
-Great! Here's a self-contained .sh installer for your Termux script named:
 
-> 🎯 Link And IP Loop
+# 🔁 Link And IP Loop
 
+A Termux-compatible Bash script with 4 main options:  
+- Reopen URL repeatedly  
+- Repeated connect to IP:Port  
+- Fast open host:port flood  
+- Search person by name online  
 
- To Use the Installer
+Supports English and Russian languages.
 
-1. Save as:
-2.   https://github.com/zhobinalex/Like-And-IP-Loop/install_link_and_ip_loop.sh
+---
 
+## 🚀 Features
 
-3. open folder LinkAndIPLoop
+- Simple menu-driven interface in Termux  
+- Customizable speed and pause options  
+- Uses `netcat` for connection tests and floods  
+- Opens URLs and search results using `termux-open-url`  
+- Multi-language support (English, Russian)
 
-chmod +x
+---
 
-bash 
+## ⚙️ Installation
 
-This installer:
+1. Clone this repository:
+
+`
+git clone https://github.com/zhobinalex/LinkAndIPLoop.git
+
+cd LinkAndIPLoop
+
+bash install_link_and_ip_loop.sh
+
+$HOME/LinkAndIPLoop/link_and_ip_loop.sh
 
 Creates a working folder with needed .txt files
 
