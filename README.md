@@ -1,120 +1,68 @@
-Thank you for detailing your requirements! Here’s a breakdown of what you want in your Termux setup script:
+Great! Here's a self-contained .sh installer for your Termux script named:
+
+> 🎯 Link And IP Loop
+
+
+
+This installer:
+
+Creates a working folder with needed .txt files
+
+Adds a demo Git link (which you can replace later)
+
+Asks the user for language: English 🇬🇧, Russian 🇷🇺, or Persian 🇮🇷
+
+Displays the script name in a styled header
+
+Prepares everything to run cleanly on Termux
+
 
 ---
 
-## **Requirements Recap**
+🔹 Option 1: Reopen a URL repeatedly
 
-**Header:**  
-- Display: “open bar”
-- Inject “Source by zhobinalex”
+User sets URL, speed (seconds), and optional pause time (minutes).
 
-**Option 1:**  
-- A panel to enter a URL and a timer (seconds or minutes)  
-- Automatically open the URL at the set interval (repeatable)
+The script opens the URL repeatedly using termux-open-url.
 
-**Option 2:**  
-- A panel to search for music by name, title, or artist on www.radiojavan.com  
-- User writes a query and clicks a “search” button to view results
+
 
 ---
 
-## **Key Notes**
-- Termux is terminal-based, so “panels” and “buttons” would be command-line menus or prompts.
-- For opening URLs, Termux uses `am start` (for Android browsers).
-- For music search, we’d use `curl` or `wget` to fetch search results (parsing HTML or using any available API).
-- Script header and credits will be displayed on launch.
+🔹 Option 2: Repeated connect to IP and port
+
+User inputs IP and port.
+
+Sets speed (delay in seconds).
+
+Script tries connecting (via TCP) continuously without pause.
+
+
 
 ---
 
-## **Full Bash Script for Termux**
+🔹 Option 3: Reopen IP:Port, Host:Port, or Subdomain:Port VERY FAST
 
-```bash
-#!/data/data/com.termux/files/usr/bin/bash
+User enters IP/host/subdomain + port.
 
-# Header
-clear
-echo "================================="
-echo "         open bar"
-echo "================================="
-echo "Source by zhobinalex"
-echo "================================="
+The script sends extremely fast connections (like a flood/ping).
 
-# Install required packages
-echo "[*] Installing required packages..."
-pkg update -y
-pkg install git openssh curl -y
+Goal: Fast repeated access simulation — using either:
 
-main_menu() {
-    echo ""
-    echo "Select an option:"
-    echo "1) Auto-open a URL at set intervals"
-    echo "2) Search music on radiojavan.com"
-    echo "3) Exit"
-    read -p "Enter your choice [1-3]: " choice
+curl, wget, or nc (netcat)
 
-    case "$choice" in
-        1) option1 ;;
-        2) option2 ;;
-        3) echo "Goodbye!"; exit 0 ;;
-        *) echo "Invalid choice!"; main_menu ;;
-    esac
-}
+or /dev/tcp for low overhead
 
-option1() {
-    read -p "Enter the URL to open: " url
-    read -p "Interval (number): " interval
-    read -p "Time unit (s = seconds, m = minutes): " unit
-    if [[ "$unit" == "m" ]]; then
-        interval=$((interval*60))
-    fi
-    echo "Opening $url every $interval seconds. Press CTRL+C to stop."
-    while true; do
-        am start -a android.intent.action.VIEW -d "$url"
-        sleep "$interval"
-    done
-}
 
-option2() {
-    read -p "Enter song name, title, or artist to search: " query
-    search_url="https://www.radiojavan.com/mp3s/mp3_search?q=$(echo "$query" | sed 's/ /%20/g')"
-    echo "Searching RadioJavan.com for '$query'..."
-    echo "-------------------------------------------"
-    curl -s "$search_url" | grep -Eo '<a href="/mp3s/mp3/[^"]+"' | head -10 | while read -r line; do
-        song_page="https://www.radiojavan.com$(echo $line | cut -d'"' -f2)"
-        title=$(curl -s "$song_page" | grep -oP '(?<=<title>).*?(?=</title>)')
-        echo "$title"
-        echo "Link: $song_page"
-        echo "---------------------------"
-    done
-    echo "Done."
-}
 
-while true; do
-    main_menu
-done
-```
 
 ---
 
-## **How to Use**
+🔹 Option 4: Person Finder
 
-1. **Save the script** as `openbar.sh`
-2. Run:
-   ```bash
-   chmod +x openbar.sh
-   ./openbar.sh
-   ```
-3. **Follow the menu** to use either option.
+User provides first name + last name
 
----
+Script performs internet search using various search engines or APIs (as much as possible from Termux)
 
-### **Features**
+Goal: Give back info about the person from public data
 
-- Menu-driven interface, simple for Termux.
-- Header with “open bar” and your credit.
-- Option 1: Auto-opens any URL at chosen intervals.
-- Option 2: Searches RadioJavan for songs and shows top results.
-
----
-
-Let me know if you need enhancements, like better music result formatting or persistent configuration!
