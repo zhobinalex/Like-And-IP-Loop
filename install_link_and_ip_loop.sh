@@ -70,25 +70,30 @@ menu() {
 }
 
 repeat_open_url() {
-  if [ "\$lang" = "RU" ]; then
-    read -p "Введите URL: " url
-    read -p "Скорость (секунды): " speed
-    read -p "Время паузы (минуты): " pause_minutes
-  else
-    read -p "Enter URL: " url
-    read -p "Speed (seconds): " speed
-    read -p "Pause time (minutes): " pause_minutes
+  read -p "Enter URL (e.g., google.com or https://example.com): " url
+
+  # Auto-add https:// if not already included
+  if [[ ! "$url" =~ ^https?:// ]]; then
+    url="https://$url"
   fi
 
-  pause_seconds=\$((pause_minutes * 60))
+  echo "[*] Final URL: $url"
+  read -p "Speed (seconds between opens): " speed
+  read -p "Pause time (minutes between bursts): " pause_minutes
+  pause_seconds=$((pause_minutes * 60))
+
+  echo "[*] Starting loop... Press Ctrl+C to stop."
 
   while true; do
-    termux-open-url "\$url"
-    sleep "\$speed"
-    if [ "\$pause_seconds" -gt 0 ]; then sleep "\$pause_seconds"; fi
+    termux-open-url "$url"
+    sleep "$speed"
+
+    if [ "$pause_seconds" -gt 0 ]; then
+      echo "[*] Pausing for $pause_seconds seconds..."
+      sleep "$pause_seconds"
+    fi
   done
 }
-
 connect_ip_port() {
   if [ "\$lang" = "RU" ]; then
     read -p "Введите IP: " ip
